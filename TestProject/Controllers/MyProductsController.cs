@@ -52,7 +52,8 @@ namespace TestProject.Controllers
                 return NotFound();
             }
 
-            var found = products.Where(p => p.Name.Contains(name)).ToList();
+            //var found = products.Where(p => p.Name.Contains(name)).ToList();
+            var found = products.Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
 
             if (!ModelState.IsValid)
             {
@@ -60,6 +61,26 @@ namespace TestProject.Controllers
             }
 
             return Ok(found);
+        }
+
+        [HttpGet("guid")]
+        [ProducesResponseType(200, Type = typeof(Product))]
+        [ProducesResponseType(400)]
+        public IActionResult GetProduct(Guid guid)
+        {
+            if (!_productRepository.ProductExist(guid))
+            {
+                return NotFound();
+            }
+
+            var product = _mapper.Map<ProductDto>(_productRepository.GetProduct(guid));
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            return Ok(product);
         }
 
         [HttpPost]

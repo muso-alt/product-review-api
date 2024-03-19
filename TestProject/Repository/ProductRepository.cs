@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using TestProject.Data;
-using TestProject.Dto;
+﻿using TestProject. Data;
 using TestProject.Interfaces;
 using TestProject.Models;
 
@@ -9,12 +7,10 @@ namespace TestProject.Repository
     public class ProductRepository : IProductRepository
     {
         private readonly DataContext _context;
-        private readonly IMapper _mapper;
 
-        public ProductRepository(DataContext context, IMapper mapper)
+        public ProductRepository(DataContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public bool AddProduct(Product product)
@@ -53,7 +49,7 @@ namespace TestProject.Repository
         {
             foreach (var product in _context.Products)
             {
-                if(product.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                if(product.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
